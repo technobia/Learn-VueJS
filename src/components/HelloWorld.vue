@@ -1,94 +1,66 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
+    <h1>{{ anotherMsg }}</h1>
     <ul>
-      <li>
-        <a
-          href="https://vuejs.org"
-          target="_blank"
-        >
-          Core Docs
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://forum.vuejs.org"
-          target="_blank"
-        >
-          Forum
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://chat.vuejs.org"
-          target="_blank"
-        >
-          Community Chat
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://twitter.com/vuejs"
-          target="_blank"
-        >
-          Twitter
-        </a>
-      </li>
-      <br>
-      <li>
-        <a
-          href="http://vuejs-templates.github.io/webpack/"
-          target="_blank"
-        >
-          Docs for This Template
-        </a>
+      <li v-for="product in products" :key="product.id">
+        {{ product.name }}, Quantity: {{ product.qty }}
+        <button @click="addItem(product)">+</button>
+        <button @click="removeItem(product)">-</button>
       </li>
     </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li>
-        <a
-          href="http://router.vuejs.org/"
-          target="_blank"
-        >
-          vue-router
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vuex.vuejs.org/"
-          target="_blank"
-        >
-          vuex
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vue-loader.vuejs.org/"
-          target="_blank"
-        >
-          vue-loader
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-        >
-          awesome-vue
-        </a>
-      </li>
-    </ul>
+    <div>Total Products: {{ totalProduct }}</div>
+    <div>
+      <input type="text" v-model="message" placeholder="Type some thing">
+      Message is: {{ message }}
+    </div>
+    <div>
+      <textarea v-model="initialTextarea"></textarea>
+    </div>
+    <div>
+      <select v-model="selected">
+        <option :key="index" v-for="(option, index) in options" v-bind:value="option.value">
+          {{ option.text }}
+        </option>
+      </select>
+      <span>Selected: {{ selected }}</span>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'HelloWorld',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+  methods: {
+    addItem: (product) => {
+      product.qty += 1
+    },
+    removeItem: product => {
+      product.qty -= 1
+    }
+  },
+  data: () => ({
+    msg: 'Hello world',
+    anotherMsg: 'Another hello world',
+    products: [
+      { id: 1, qty: 0, name: 'Car' },
+      { id: 2, qty: 2, name: 'Ship' },
+      { id: 3, qty: 5, name: 'Boat' }
+    ],
+    message: '',
+    initialTextarea: 'Initial text',
+    selected: 'A',
+    options: [
+      { text: 'One', value: 'A' },
+      { text: 'Two', value: 'B' },
+      { text: 'Three', value: 'C' }
+    ]
+  }),
+  computed: {
+    totalProduct () {
+      return this.products.reduce((sum, item) => {
+        return sum + item.qty
+      }, 0)
     }
   }
 }
@@ -104,10 +76,16 @@ ul {
   padding: 0;
 }
 li {
-  display: inline-block;
+  display: block;
   margin: 0 10px;
 }
 a {
   color: #42b983;
+}
+.hello {
+  padding-bottom: 30px;
+}
+div {
+  margin: 15px 0;
 }
 </style>
